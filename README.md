@@ -21,7 +21,7 @@ print(sprites)
 
 NOTE: [godot_finder_bin](https://github.com/funatsufumiya/godot_finder_bin) makes installation even easier.
 
-### Copy Files
+### 1. Copy Files
 
 - Create a `addons/finder` folder in your godot project
 - Place `finder.gdextension` in it below:
@@ -50,7 +50,7 @@ NOTE: [godot_finder_bin](https://github.com/funatsufumiya/godot_finder_bin) make
 - Place dlls from [Releases](releases) into `bin` folder
 - Copy `*.gd` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
 
-### Enable Plugin
+### 2. Enable Plugin
 
 - Enable the plugin in the project settings
 
