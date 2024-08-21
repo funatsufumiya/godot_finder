@@ -24,31 +24,10 @@ NOTE: [godot_finder_bin](https://github.com/funatsufumiya/godot_finder_bin) make
 ### 1. Copy Files
 
 - Create a `addons/finder` folder in your godot project
-- Place `finder.gdextension` in it below:
-
-    ```text
-    [configuration]
-
-    entry_symbol = "gdextension_init"
-    compatibility_minimum = 4.2
-
-    [libraries]
-
-    macos.debug = "bin/libfinder.macos.debug.framework"
-    macos.release = "bin/libfinder.macos.release.framework"
-    windows.debug.x86_64 = "bin/libfinder.windows.debug.x86_64.dll"
-    windows.release.x86_64 = "bin/libfinder.windows.release.x86_64.dll"
-    linux.debug.x86_64 = "bin/libfinder.linux.debug.x86_64.so"
-    linux.release.x86_64 = "bin/libfinder.linux.release.x86_64.so"
-    linux.debug.arm64 = "bin/libfinder.linux.debug.arm64.so"
-    linux.release.arm64 = "bin/libfinder.linux.release.arm64.so"
-    linux.debug.rv64 = "bin/libfinder.linux.debug.rv64.so"
-    linux.release.rv64 = "bin/libfinder.linux.release.rv64.so"
-    ```
-
+- Copy `*.gd`, `plugin.cfg`, `finder.gdextension` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
 - Create a `addons/finder/bin` folder in your godot project
 - Place dlls from [Releases](releases) into `bin` folder
-- Copy `*.gd` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
+
 
 ### 2. Enable Plugin
 
