@@ -38,9 +38,22 @@ bool FinderImpl::is_instance_of(Variant a, String typeName)
     if (value_object->get_script()) {
         Variant script = value_object->get_script();
         Script *script_ptr = Object::cast_to<Script>(script);
-        if (script_ptr) {
-            if (script_ptr->instance_has(value_object)) {
+        while (script_ptr) {
+            // NOTE: this causes wong results!!
+            // if (script_ptr->instance_has(value_object)) {
+            //     UtilityFunctions::print(a.operator String() + " is instance of " + typeName + " by script");
+            //     return true;
+            // }
+            if (script_ptr->get_global_name() == typeName) {
+                // UtilityFunctions::print(a.operator String() + " is instance of " + typeName + " by script");
                 return true;
+            }
+            else if (script_ptr->get_instance_base_type() == typeName) {
+                // UtilityFunctions::print(a.operator String() + " is instance of " + typeName + " by script");
+                return true;
+            }
+            else{
+                script_ptr = script_ptr->get_base_script().ptr();
             }
         }
     }

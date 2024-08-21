@@ -23,6 +23,9 @@ func _ready() -> void:
 
 	assert(my_sprites.size() == 2)
 
+	var my_sprite1 = my_sprites[0] as MySprite
+	my_sprite1.hello()
+
 
 func _process(_delta: float) -> void:
 	pass
