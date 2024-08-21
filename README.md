@@ -26,7 +26,7 @@ NOTE: [godot_finder_bin](https://github.com/funatsufumiya/godot_finder_bin) make
 - Create a `addons/finder` folder in your godot project
 - Copy `*.gd`, `plugin.cfg`, `finder.gdextension` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
 - Create a `addons/finder/bin` folder in your godot project
-- Place dlls from [Releases](https://github.com/funatsufumiya/godot_finder/releases) into `bin` folder
+- Place dll(s) from [Releases](https://github.com/funatsufumiya/godot_finder/releases) into `bin` folder
 
 
 ### 2. Enable Plugin
