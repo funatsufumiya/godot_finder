@@ -7,6 +7,7 @@ Node finder addon for Godot 4.2.2 - 4.3
 ```gd
 # get root node
 var root = Finder.get_root()
+print(root)
 
 # query node by name, and get first one
 var test1 = Finder.find_child_by_name(root, "Test1")
