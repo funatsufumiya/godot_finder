@@ -12,5 +12,13 @@ config_version=5
 
 config/name="godot_explorer_demo_project"
 run/main_scene="res://sample_scene.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Finder="*res://addons/finder/finder.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/finder/plugin.cfg")

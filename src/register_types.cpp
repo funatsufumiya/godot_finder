@@ -7,8 +7,7 @@
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
-#include "osc.hpp"
-#include "osc_message.hpp"
+#include "finder.hpp"
 
 using namespace godot;
 
@@ -16,8 +15,7 @@ void gdextension_initialize(ModuleInitializationLevel p_level)
 {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE)
 	{
-		ClassDB::register_class<OSC>();
-		ClassDB::register_class<OSCMessage>();
+		ClassDB::register_class<FinderImpl>();
 	}
 }
 

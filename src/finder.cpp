@@ -1,137 +1,187 @@
-#include "osc.hpp"
-#include "osc_message.hpp"
+#include "finder.hpp"
 
 #include <godot_cpp/variant/utility_functions.hpp>
-#include <godot_cpp/classes/packet_peer_udp.hpp>
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/window.hpp>
 
 #include <memory>
 
 using namespace godot;
 
-void OSC::_bind_methods() {
+void FinderImpl::_bind_methods() {
     // ClassDB::bind_method(D_METHOD("_init", "inPort", "outPort", "outIP"), &OSC::_init);
-    // ClassDB::bind_static_method("OSC", D_METHOD("create", "inPort", "outPort", "outIP"), &OSC::create);
-    ClassDB::bind_static_method("OSC", D_METHOD("new_from", "inPort", "outPort", "outIP"), &OSC::new_from);
-    ClassDB::bind_method(D_METHOD("init", "inPort", "outPort", "outIP"), &OSC::init);
-    ClassDB::bind_method(D_METHOD("sendBuffer", "buffer"), &OSC::sendBuffer);
-    ClassDB::bind_method(D_METHOD("send", "address", "arguments"), &OSC::send);
-    ClassDB::bind_method(D_METHOD("stop"), &OSC::stop);
-    ClassDB::bind_method(D_METHOD("onMessage", "address", "callback"), &OSC::onMessage);
+    // ClassDB::bind_static_method("FinderImpl", D_METHOD("create", "inPort", "outPort", "outIP"), &OSC::create);
+
+    ClassDB::bind_method(D_METHOD("find_child_by_type", "parent", "type"), &FinderImpl::find_child_by_type);
+    ClassDB::bind_method(D_METHOD("find_children_by_type", "parent", "type"), &FinderImpl::find_children_by_type);
+    ClassDB::bind_method(D_METHOD("find_child_by_type_with_condition", "parent", "type", "condition"), &FinderImpl::find_child_by_type_with_condition);
+    ClassDB::bind_method(D_METHOD("find_children_by_type_with_condition", "parent", "type", "condition"), &FinderImpl::find_children_by_type_with_condition);
+    ClassDB::bind_method(D_METHOD("find_child_by_name", "parent", "name"), &FinderImpl::find_child_by_name);
+    ClassDB::bind_method(D_METHOD("find_children_by_name", "parent", "name"), &FinderImpl::find_children_by_name);
+    ClassDB::bind_method(D_METHOD("is_children", "parent", "node"), &FinderImpl::is_children);
+    ClassDB::bind_method(D_METHOD("get_root"), &FinderImpl::get_root);
 }
 
-OSC::OSC()
+FinderImpl::FinderImpl()
 {
-    // UtilityFunctions::print("OSC::constructor");
+    // UtilityFunctions::print("FinderImpl::constructor");
 }
 
-OSC::~OSC()
+FinderImpl::~FinderImpl()
 {
 }
 
-OSC* OSC::new_from(int inPort, int outPort, String outIP) {
-    // UtilityFunctions::print("OSC::new_from");
-
-    OSC* osc = memnew(OSC);
-    osc->init(inPort, outPort, outIP);
-
-    return osc;
+void FinderImpl::_ready()
+{
+    // UtilityFunctions::print("FinderImpl::_ready");
 }
 
-void OSC::init(int inPort, int outPort, String outIP) {
-    // UtilityFunctions::print("OSC::init");
-    // UtilityFunctions::print("OSC::init inPort: " + String::num_int64(inPort) + " outPort: " + String::num_int64(outPort) + " outIP: " + outIP);
-    _inPort = inPort;
-    _outPort = outPort;
-    _outIP = outIP;
-
-    server = memnew(UDPServer);
-    server->listen(inPort);
-    UtilityFunctions::print("OSC UDP server listening on port: " + String::num_int64(inPort));
+void FinderImpl::_process(double delta)
+{
+    // UtilityFunctions::print("FinderImpl::_process");
 }
 
-void OSC::_ready() {
-    // UtilityFunctions::print("OSC::_ready()");
-}
+// Node* find_child_by_type(Node* parent, String type);
+//     Array find_children_by_type(Node* parent, String type);
+//     Node* find_child_by_type_with_condition(Node* parent, String type, Callable condition);
+//     Array find_children_by_type_with_condition(Node* parent, String type, Callable condition);
+//     Node* find_child_by_name(Node* parent, String name);
+//     Array find_children_by_name(Node* parent, String name);
+//     bool is_children(Node* parent, Node* node);
+//     Node* get_root();
 
-void OSC::_process(double delta) {
-    server->poll(); // Important!
-    if (server->is_connection_available()) {
-        Ref<PacketPeerUDP> peer = server->take_connection();
-        PackedByteArray packet = peer->get_packet();
-
-        // UtilityFunctions::print("[debug] OSC packet received: " + packet.get_string_from_utf8());
-
-        std::shared_ptr<OSCMessage> msg = std::make_shared<OSCMessage>();
-        msg->init(packet);
-
-        // UtilityFunctions::print("OSC message received: " + msg->address());
-        // UtilityFunctions::print("OSC message content: " + msg->toString());
-        
-        if (!msg->isValid()) {
-            // UtilityFunctions::print("[debug] OSC message is invalid");
-            return;
-        }
-        if (messageHandlers.has("*")) {
-            Array empty = Array();
-            Array arr = messageHandlers.get("*", empty);
-
-            for (int i = 0; i < arr.size(); i++) {
-                // UtilityFunctions::print("Calling handler in *");
-                Callable handler = arr[i];
-                // handler.call(msg.get());
-                // handler.call("call", msg.get());
-                // handler.call();
-                handler.call(msg->address(), msg->getValues());
-            }
-        }
-        if (messageHandlers.has(msg->address())) {
-            Array arr = messageHandlers[msg->address()];
-
-            for (int i = 0; i < arr.size(); i++) {
-                // UtilityFunctions::print("Calling handler (hash " + String::num(handler.hash()) + ") in address: " + msg->address());
-                Callable handler = arr[i];
-                // handler.call(msg.get());
-                // handler.call("call", msg.get());
-                // handler.call();
-                handler.call(msg->address(), msg->getValues());
-            }
+Node* FinderImpl::find_child_by_type(Node* parent, String type)
+{
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("find_child_by_type: parent is null");
+        return nullptr;
+    }
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child->is_class(type))
+        {
+            return child;
         }
     }
+    return nullptr;
 }
 
-void OSC::sendBuffer(PackedByteArray buffer) {
-    // UtilityFunctions::print("OSC::sendBuffer");
-
-    Ref<PacketPeerUDP> udp = memnew(PacketPeerUDP);
-    udp->connect_to_host(_outIP, _outPort);
-    udp->put_packet(buffer);
-    // UtilityFunctions::print("OSC UDP packet sent to " + _outIP + ":" + String::num_int64(_outPort));
-}
-
-void OSC::send(String address, Array arguments) {
-    // UtilityFunctions::print("OSC::send");
-
-    OSCMessage msg;
-    msg.init(address);
-    for (int i = 0; i < arguments.size(); i++) {
-        msg.add(arguments[i]);
+Array FinderImpl::find_children_by_type(Node* parent, String type)
+{
+    Array result;
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("find_children_by_type: parent is null");
+        return result;
     }
-    sendBuffer(msg.toPackedByteArray());
-}
-
-void OSC::stop() {
-    server->stop();
-    UtilityFunctions::print("OSC UDP server stopped");
-}
-
-void OSC::onMessage(String address, Callable callback) {
-    // UtilityFunctions::print("OSC::onMessage");
-
-    if (!messageHandlers.has(address)) {
-        messageHandlers[address] = Array();
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child->is_class(type))
+        {
+            result.append(child);
+        }
     }
-    ((Array)messageHandlers[address]).push_back(callback);
+    return result;
+}
 
-    // UtilityFunctions::print("OSC::onMessage: callback (hash " + String::num(callback.hash()) + ") added to address: " + address);
+Node* FinderImpl::find_child_by_type_with_condition(Node* parent, String type, Callable condition)
+{
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("find_child_by_type_with_condition: parent is null");
+        return nullptr;
+    }
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child->is_class(type) && condition.call(child))
+        {
+            return child;
+        }
+    }
+    return nullptr;
+}
+
+Array FinderImpl::find_children_by_type_with_condition(Node* parent, String type, Callable condition)
+{
+    Array result;
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("find_children_by_type_with_condition: parent is null");
+        return result;
+    }
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child->is_class(type) && condition.call(child))
+        {
+            result.append(child);
+        }
+    }
+    return result;
+}
+
+Node* FinderImpl::find_child_by_name(Node* parent, String name)
+{
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("find_child_by_name: parent is null");
+        return nullptr;
+    }
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child->get_name() == name)
+        {
+            return child;
+        }
+    }
+    return nullptr;
+}
+
+Array FinderImpl::find_children_by_name(Node* parent, String name)
+{
+    Array result;
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("find_children_by_name: parent is null");
+        return result;
+    }
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child->get_name() == name)
+        {
+            result.append(child);
+        }
+    }
+    return result;
+}
+
+bool FinderImpl::is_children(Node* parent, Node* node)
+{
+    if (parent == nullptr)
+    {
+        UtilityFunctions::push_warning("is_children: parent is null");
+        return false;
+    }
+    for (int i = 0; i < parent->get_child_count(); i++)
+    {
+        Node* child = parent->get_child(i);
+        if (child == node)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Node* FinderImpl::get_root()
+{
+    // NOTE: returns the last child of the root node
+    return get_tree()->get_root()->get_child(get_tree()->get_root()->get_child_count() - 1);
 }
