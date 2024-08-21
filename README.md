@@ -2,10 +2,27 @@
 
 Finder addon for Godot 4.2.2 - 4.3
 
+## Usage
+
+```gd
+var root = Finder.get_root()
+
+var test1 = Finder.find_child_by_name(root, "Test1")
+print(test1)
+
+var test_sprite1 = Finder.find_child_by_type(root, "Sprite2D")
+print(test_sprite1)
+
+var sprites = Finder.find_children_by_type(root, "Sprite2D")
+print(sprites)
+```
+
 ## Install
 
-- create a `addons` folder in your godot project
-- place `finder.gdextension` below:
+### Copy Files
+
+- Create a `addons` folder in your godot project
+- Place `finder.gdextension` below:
 
     ```text
     [configuration]
@@ -27,8 +44,13 @@ Finder addon for Godot 4.2.2 - 4.3
     linux.release.rv64 = "bin/libfinder.linux.release.rv64.so"
     ```
 
-- create a `bin` folder in your godot project
-- place dlls from [Releases](releases) into `bin` folder
+- Create a `bin` folder in your godot project
+- Place dlls from [Releases](releases) into `bin` folder
+- Copy `*.gd` files from `addons/finder` to `addons/finder` in your godot project
+
+### Enable Plugin
+
+- Enable the plugin in the project settings
 
 ## Build and Run
 
