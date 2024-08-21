@@ -13,20 +13,25 @@ void FinderImpl::_bind_methods() {
     // ClassDB::bind_method(D_METHOD("_init", "inPort", "outPort", "outIP"), &OSC::_init);
     // ClassDB::bind_static_method("FinderImpl", D_METHOD("create", "inPort", "outPort", "outIP"), &OSC::create);
 
-    ClassDB::bind_method(D_METHOD("find_child_by_type", "parent", "type"), &FinderImpl::find_child_by_type);
-    ClassDB::bind_method(D_METHOD("find_children_by_type", "parent", "type"), &FinderImpl::find_children_by_type);
-    ClassDB::bind_method(D_METHOD("find_child_by_type_with_condition", "parent", "type", "condition"), &FinderImpl::find_child_by_type_with_condition);
-    ClassDB::bind_method(D_METHOD("find_children_by_type_with_condition", "parent", "type", "condition"), &FinderImpl::find_children_by_type_with_condition);
+    ClassDB::bind_method(D_METHOD("find_child_by_type", "parent", "typeName"), &FinderImpl::find_child_by_type);
+    ClassDB::bind_method(D_METHOD("find_children_by_type", "parent", "typeName"), &FinderImpl::find_children_by_type);
+    ClassDB::bind_method(D_METHOD("find_child_by_type_with_condition", "parent", "typeName", "condition"), &FinderImpl::find_child_by_type_with_condition);
+    ClassDB::bind_method(D_METHOD("find_children_by_type_with_condition", "parent", "typeName", "condition"), &FinderImpl::find_children_by_type_with_condition);
     ClassDB::bind_method(D_METHOD("find_child_by_name", "parent", "name"), &FinderImpl::find_child_by_name);
     ClassDB::bind_method(D_METHOD("find_children_by_name", "parent", "name"), &FinderImpl::find_children_by_name);
     ClassDB::bind_method(D_METHOD("is_children", "parent", "node"), &FinderImpl::is_children);
     ClassDB::bind_method(D_METHOD("get_root"), &FinderImpl::get_root);
 }
 
-bool FinderImpl::is_instance_of(Variant a, Variant type)
+bool FinderImpl::is_instance_of(Variant a, String typeName)
 {
-    Variant v = call("is_instance_of", a, type);
-    return v.operator bool();
+    // UtilityFunctions::print("is_instance_of(" + a.operator String() + ", " + type.operator String() + ")");
+    // Variant v = call("is_instance_of", a, type);
+    // UtilityFunctions::print("is_instance_of: " + v.operator String());
+    // return v.operator bool();
+
+    Object *value_object = Object::cast_to<Object>(a);
+    return ClassDB::is_parent_class(value_object->get_class(), typeName);
 }
 
 FinderImpl::FinderImpl()
@@ -57,7 +62,7 @@ void FinderImpl::_process(double delta)
 //     bool is_children(Node* parent, Node* node);
 //     Node* get_root();
 
-Node* FinderImpl::find_child_by_type(Node* parent, String type)
+Node* FinderImpl::find_child_by_type(Node* parent, String typeName)
 {
     if (parent == nullptr)
     {
@@ -67,11 +72,11 @@ Node* FinderImpl::find_child_by_type(Node* parent, String type)
     for (int i = 0; i < parent->get_child_count(); i++)
     {
         Node* child = parent->get_child(i);
-        if(is_instance_of(child, type))
+        if(is_instance_of(child, typeName))
         {
             return child;
         }
-        Node* grandchild = find_child_by_type(child, type);
+        Node* grandchild = find_child_by_type(child, typeName);
         if (grandchild != nullptr)
         {
             return grandchild;
@@ -80,7 +85,7 @@ Node* FinderImpl::find_child_by_type(Node* parent, String type)
     return nullptr;
 }
 
-Array FinderImpl::find_children_by_type(Node* parent, String type)
+Array FinderImpl::find_children_by_type(Node* parent, String typeName)
 {
     Array result;
     if (parent == nullptr)
@@ -91,11 +96,11 @@ Array FinderImpl::find_children_by_type(Node* parent, String type)
     for (int i = 0; i < parent->get_child_count(); i++)
     {
         Node* child = parent->get_child(i);
-        if(is_instance_of(child, type))
+        if(is_instance_of(child, typeName))
         {
             result.append(child);
         }
-        Array grandchilds = find_children_by_type(child, type);
+        Array grandchilds = find_children_by_type(child, typeName);
         for (int j = 0; j < grandchilds.size(); j++)
         {
             result.append(grandchilds[j]);
@@ -104,9 +109,9 @@ Array FinderImpl::find_children_by_type(Node* parent, String type)
     return result;
 }
 
-Node* FinderImpl::find_child_by_type_with_condition(Node* parent, String type, Callable condition)
+Node* FinderImpl::find_child_by_type_with_condition(Node* parent, String typeName, Callable condition)
 {
-    Array children = find_children_by_type(parent, type);
+    Array children = find_children_by_type(parent, typeName);
     Array result;
     for (int i = 0; i < children.size(); i++)
     {
@@ -120,9 +125,9 @@ Node* FinderImpl::find_child_by_type_with_condition(Node* parent, String type, C
     return nullptr;
 }
 
-Array FinderImpl::find_children_by_type_with_condition(Node* parent, String type, Callable condition)
+Array FinderImpl::find_children_by_type_with_condition(Node* parent, String typeName, Callable condition)
 {
-    Array children = find_children_by_type(parent, type);
+    Array children = find_children_by_type(parent, typeName);
     Array result;
     for (int i = 0; i < children.size(); i++)
     {
