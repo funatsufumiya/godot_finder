@@ -32,10 +32,8 @@ print(sprites)
 
     [libraries]
 
-    macos.debug.x86_64 = "bin/libfinder.macos.debug.x86_64.framework"
-    macos.release.x86_64 = "bin/libfinder.macos.release.x86_64.framework"
-    macos.debug.arm64 = "bin/libfinder.macos.debug.arm64.framework"
-    macos.release.arm64 = "bin/libfinder.macos.release.arm64.framework"
+    macos.debug = "bin/libfinder.macos.debug.framework"
+    macos.release = "bin/libfinder.macos.release.framework"
     windows.debug.x86_64 = "bin/libfinder.windows.debug.x86_64.dll"
     windows.release.x86_64 = "bin/libfinder.windows.release.x86_64.dll"
     linux.debug.x86_64 = "bin/libfinder.linux.debug.x86_64.so"
