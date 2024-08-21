@@ -65,6 +65,11 @@ Node* FinderImpl::find_child_by_type(Node* parent, String type)
         {
             return child;
         }
+        Node* grandchild = find_child_by_type(child, type);
+        if (grandchild != nullptr)
+        {
+            return grandchild;
+        }
     }
     return nullptr;
 }
@@ -84,21 +89,24 @@ Array FinderImpl::find_children_by_type(Node* parent, String type)
         {
             result.append(child);
         }
+        Array grandchilds = find_children_by_type(child, type);
+        for (int j = 0; j < grandchilds.size(); j++)
+        {
+            result.append(grandchilds[j]);
+        }
     }
     return result;
 }
 
 Node* FinderImpl::find_child_by_type_with_condition(Node* parent, String type, Callable condition)
 {
-    if (parent == nullptr)
+    Array children = find_children_by_type(parent, type);
+    Array result;
+    for (int i = 0; i < children.size(); i++)
     {
-        UtilityFunctions::push_warning("find_child_by_type_with_condition: parent is null");
-        return nullptr;
-    }
-    for (int i = 0; i < parent->get_child_count(); i++)
-    {
-        Node* child = parent->get_child(i);
-        if (child->is_class(type) && condition.call(child))
+        Variant v = children[i];
+        Node* child = Object::cast_to<Node>(v);
+        if (condition.call(child))
         {
             return child;
         }
@@ -108,16 +116,13 @@ Node* FinderImpl::find_child_by_type_with_condition(Node* parent, String type, C
 
 Array FinderImpl::find_children_by_type_with_condition(Node* parent, String type, Callable condition)
 {
+    Array children = find_children_by_type(parent, type);
     Array result;
-    if (parent == nullptr)
+    for (int i = 0; i < children.size(); i++)
     {
-        UtilityFunctions::push_warning("find_children_by_type_with_condition: parent is null");
-        return result;
-    }
-    for (int i = 0; i < parent->get_child_count(); i++)
-    {
-        Node* child = parent->get_child(i);
-        if (child->is_class(type) && condition.call(child))
+        Variant v = children[i];
+        Node* child = Object::cast_to<Node>(v);
+        if (condition.call(child))
         {
             result.append(child);
         }
@@ -139,6 +144,11 @@ Node* FinderImpl::find_child_by_name(Node* parent, String name)
         {
             return child;
         }
+        Node* grandchild = find_child_by_name(child, name);
+        if (grandchild != nullptr)
+        {
+            return grandchild;
+        }
     }
     return nullptr;
 }
@@ -158,6 +168,11 @@ Array FinderImpl::find_children_by_name(Node* parent, String name)
         {
             result.append(child);
         }
+        Array grandchilds = find_children_by_name(child, name);
+        for (int j = 0; j < grandchilds.size(); j++)
+        {
+            result.append(grandchilds[j]);
+        }
     }
     return result;
 }
@@ -173,6 +188,10 @@ bool FinderImpl::is_children(Node* parent, Node* node)
     {
         Node* child = parent->get_child(i);
         if (child == node)
+        {
+            return true;
+        }
+        if (is_children(child, node))
         {
             return true;
         }

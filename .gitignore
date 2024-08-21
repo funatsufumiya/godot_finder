@@ -20,7 +20,7 @@
 log.txt
 *.log
 
-project/addons/osc/bin/*
+project/addons/finder/bin/*
 *.dll
 *.exp
 *.lib

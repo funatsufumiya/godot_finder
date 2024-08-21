@@ -10,3 +10,11 @@ script = ExtResource("1_t0n1d")
 [node name="TestSprite1" type="Sprite2D" parent="."]
 
 [node name="TestSprite2" type="Sprite2D" parent="."]
+
+[node name="SomeParent" type="Node2D" parent="."]
+
+[node name="TestSprite3" type="Sprite2D" parent="SomeParent"]
+
+[node name="OtherParent" type="Node2D" parent="SomeParent"]
+
+[node name="TestSprite4" type="Sprite2D" parent="SomeParent/OtherParent"]
