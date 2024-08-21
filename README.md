@@ -1,6 +1,6 @@
 # godot_finder
 
-Finder addon for Godot 4.2.2 - 4.3
+Finding node utility addon for Godot 4.2.2 - 4.3
 
 ## Usage
 
