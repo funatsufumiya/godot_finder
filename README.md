@@ -19,6 +19,8 @@ print(sprites)
 
 ## Install
 
+NOTE: [godot_finder_bin](https://github.com/funatsufumiya/godot_finder_bin) makes installation even easier.
+
 ### Copy Files
 
 - Create a `addons/finder` folder in your godot project
