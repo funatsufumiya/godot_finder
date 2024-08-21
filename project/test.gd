@@ -16,6 +16,13 @@ func _ready() -> void:
 	var sprites = Finder.find_children_by_type(root, "Sprite2D")
 	print(sprites)
 
+	assert(sprites.size() == 4)
+	
+	var my_sprites = Finder.find_children_by_type(root, "MySprite")
+	print(my_sprites)
 
-func _process(delta: float) -> void:
+	assert(my_sprites.size() == 2)
+
+
+func _process(_delta: float) -> void:
 	pass

@@ -4,6 +4,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/window.hpp>
+#include <godot_cpp/classes/script.hpp>
 
 #include <memory>
 
@@ -25,13 +26,26 @@ void FinderImpl::_bind_methods() {
 
 bool FinderImpl::is_instance_of(Variant a, String typeName)
 {
-    // UtilityFunctions::print("is_instance_of(" + a.operator String() + ", " + type.operator String() + ")");
-    // Variant v = call("is_instance_of", a, type);
-    // UtilityFunctions::print("is_instance_of: " + v.operator String());
-    // return v.operator bool();
-
+    // first, check GDNativeClass
     Object *value_object = Object::cast_to<Object>(a);
-    return ClassDB::is_parent_class(value_object->get_class(), typeName);
+    bool res = ClassDB::is_parent_class(value_object->get_class(), typeName);
+
+    if(res) {
+        return res;
+    }
+
+    // second, check Script
+    if (value_object->get_script()) {
+        Variant script = value_object->get_script();
+        Script *script_ptr = Object::cast_to<Script>(script);
+        if (script_ptr) {
+            if (script_ptr->instance_has(value_object)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 FinderImpl::FinderImpl()

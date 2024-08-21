@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbyrticosbwf8"]
+[gd_scene load_steps=3 format=3 uid="uid://cbyrticosbwf8"]
 
 [ext_resource type="Script" path="res://test.gd" id="1_t0n1d"]
+[ext_resource type="Script" path="res://my_sprite.gd" id="2_4g1gs"]
 
 [node name="SampleScene" type="Node2D"]
 script = ExtResource("1_t0n1d")
@@ -8,6 +9,7 @@ script = ExtResource("1_t0n1d")
 [node name="Test1" type="Node2D" parent="."]
 
 [node name="TestSprite1" type="Sprite2D" parent="."]
+script = ExtResource("2_4g1gs")
 
 [node name="TestSprite2" type="Sprite2D" parent="."]
 
@@ -18,3 +20,4 @@ script = ExtResource("1_t0n1d")
 [node name="OtherParent" type="Node2D" parent="SomeParent"]
 
 [node name="TestSprite4" type="Sprite2D" parent="SomeParent/OtherParent"]
+script = ExtResource("2_4g1gs")
