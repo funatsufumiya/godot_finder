@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from glob import glob
 from pathlib import Path
+import os
 
 # # cross compilation example: aarch64-macos-none
 # env_options = {
@@ -8,9 +9,11 @@ from pathlib import Path
 #     "CXX"   : "zig c++ -target aarch64-macos-none",
 #     "LD"    : "zig c++ -target aarch64-macos-none",
 #     "AR"    : "zig ar -target aarch64-macos-none",
+#     "OBJCOPY": "zig objcopy -target aarch64-macos-none",
 # }
-# env = Environment(**env_options)
-# Export('env')
+# env = Environment(tools=('gcc', 'g++', 'gnulink', 'ar', 'as'), ENV=os.environ)
+# env.SetOption('warn', 'no-visual-c-missing')
+# env.Replace(**env_options)
 
 # # cross compilation example: x86_64-macos-none
 # env_options = {
@@ -18,9 +21,11 @@ from pathlib import Path
 #     "CXX"   : "zig c++ -target x86_64-macos-none",
 #     "LD"    : "zig c++ -target x86_64-macos-none",
 #     "AR"    : "zig ar -target x86_64-macos-none",
+#     "OBJCOPY": "zig objcopy -target x86_64-macos-none",
 # }
-# env = Environment(**env_options)
-# Export('env')
+# env = Environment(tools=('gcc', 'g++', 'gnulink', 'ar', 'as'), ENV=os.environ)
+# env.SetOption('warn', 'no-visual-c-missing')
+# env.Replace(**env_options)
 
 # define tests
 AddOption(
