@@ -21,8 +21,8 @@ print(sprites)
 
 ### Copy Files
 
-- Create a `addons` folder in your godot project
-- Place `finder.gdextension` below:
+- Create a `addons/finder` folder in your godot project
+- Place `finder.gdextension` in it below:
 
     ```text
     [configuration]
@@ -44,7 +44,7 @@ print(sprites)
     linux.release.rv64 = "bin/libfinder.linux.release.rv64.so"
     ```
 
-- Create a `bin` folder in your godot project
+- Create a `addons/finder/bin` folder in your godot project
 - Place dlls from [Releases](releases) into `bin` folder
 - Copy `*.gd` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
 
