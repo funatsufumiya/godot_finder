@@ -23,6 +23,12 @@ void FinderImpl::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_root"), &FinderImpl::get_root);
 }
 
+bool FinderImpl::is_instance_of(Variant a, Variant type)
+{
+    Variant v = call("is_instance_of", a, type);
+    return v.operator bool();
+}
+
 FinderImpl::FinderImpl()
 {
     // UtilityFunctions::print("FinderImpl::constructor");
@@ -61,7 +67,7 @@ Node* FinderImpl::find_child_by_type(Node* parent, String type)
     for (int i = 0; i < parent->get_child_count(); i++)
     {
         Node* child = parent->get_child(i);
-        if (child->is_class(type))
+        if(is_instance_of(child, type))
         {
             return child;
         }
@@ -85,7 +91,7 @@ Array FinderImpl::find_children_by_type(Node* parent, String type)
     for (int i = 0; i < parent->get_child_count(); i++)
     {
         Node* child = parent->get_child(i);
-        if (child->is_class(type))
+        if(is_instance_of(child, type))
         {
             result.append(child);
         }
