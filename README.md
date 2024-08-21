@@ -46,7 +46,7 @@ print(sprites)
 
 - Create a `bin` folder in your godot project
 - Place dlls from [Releases](releases) into `bin` folder
-- Copy `*.gd` files from `addons/finder` to `addons/finder` in your godot project
+- Copy `*.gd` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
 
 ### Enable Plugin
 
