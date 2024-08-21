@@ -2,6 +2,26 @@
 from glob import glob
 from pathlib import Path
 
+# # cross compilation example: aarch64-macos-none
+# env_options = {
+#     "CC"    : "zig cc -target aarch64-macos-none",
+#     "CXX"   : "zig c++ -target aarch64-macos-none",
+#     "LD"    : "zig c++ -target aarch64-macos-none",
+#     "AR"    : "zig ar -target aarch64-macos-none",
+# }
+# env = Environment(**env_options)
+# Export('env')
+
+# # cross compilation example: x86_64-macos-none
+# env_options = {
+#     "CC"    : "zig cc -target x86_64-macos-none",
+#     "CXX"   : "zig c++ -target x86_64-macos-none",
+#     "LD"    : "zig c++ -target x86_64-macos-none",
+#     "AR"    : "zig ar -target x86_64-macos-none",
+# }
+# env = Environment(**env_options)
+# Export('env')
+
 # define tests
 AddOption(
     "--tests",
