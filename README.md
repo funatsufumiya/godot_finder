@@ -19,7 +19,7 @@ graph TD;
 
 - GDScript:
 
-```gd
+```gdscript
 # get root node
 var root = Finder.get_root()
 print(root) # -> MyRoot
