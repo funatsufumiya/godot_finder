@@ -1,61 +1,70 @@
 # godot_finder
 
-Finder addon for Godot 4.2.2 - 4.3
+Node finder addon for Godot 4.2.2 - 4.3
 
 ## Usage
 
-```gd
+- Example node tree:
+
+```mermaid
+graph TD;
+    MyRoot-->Test1;
+    MyRoot-->SpriteA["SpriteA (MySprite)"];
+    MyRoot-->SpriteB;
+    MyRoot-->ParentA;
+    ParentA-->SpriteC;
+    ParentA-->ParentB;
+    ParentB-->SpriteD["SpriteD (MySprite)"];
+```
+
+- GDScript:
+
+```gdscript
+# get root node
 var root = Finder.get_root()
+print(root) # -> MyRoot
 
+# query node by name, and get first one
 var test1 = Finder.find_child_by_name(root, "Test1")
-print(test1)
+print(test1) # -> Test1
 
+# query node by type, and get first one
 var test_sprite1 = Finder.find_child_by_type(root, "Sprite2D")
-print(test_sprite1)
+print(test_sprite1) # -> SpriteA
 
+# query node by type, and get all
 var sprites = Finder.find_children_by_type(root, "Sprite2D")
-print(sprites)
+print(sprites) # -> [SpriteA, SpriteB, SpriteC, SpriteD]
+
+# query node by user defined type
+var my_sprites = Finder.find_children_by_type(root, "MySprite")
+print(my_sprites) # -> [SpriteA, SpriteD]
 ```
 
 ## Install
 
-### Copy Files
+NOTE: [godot_finder_bin](https://github.com/funatsufumiya/godot_finder_bin) makes installation even easier.
+
+### 1. Copy Files
 
 - Create a `addons/finder` folder in your godot project
-- Place `finder.gdextension` in it below:
-
-    ```text
-    [configuration]
-
-    entry_symbol = "gdextension_init"
-    compatibility_minimum = 4.2
-
-    [libraries]
-
-    macos.debug = "bin/libfinder.macos.debug.framework"
-    macos.release = "bin/libfinder.macos.release.framework"
-    windows.debug.x86_64 = "bin/libfinder.windows.debug.x86_64.dll"
-    windows.release.x86_64 = "bin/libfinder.windows.release.x86_64.dll"
-    linux.debug.x86_64 = "bin/libfinder.linux.debug.x86_64.so"
-    linux.release.x86_64 = "bin/libfinder.linux.release.x86_64.so"
-    linux.debug.arm64 = "bin/libfinder.linux.debug.arm64.so"
-    linux.release.arm64 = "bin/libfinder.linux.release.arm64.so"
-    linux.debug.rv64 = "bin/libfinder.linux.debug.rv64.so"
-    linux.release.rv64 = "bin/libfinder.linux.release.rv64.so"
-    ```
-
+- Copy `*.gd`, `plugin.cfg`, `finder.gdextension` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
 - Create a `addons/finder/bin` folder in your godot project
-- Place dlls from [Releases](releases) into `bin` folder
-- Copy `*.gd` files from [`addons/finder`](project/addons/finder) to `addons/finder` in your godot project
+- Place dll(s) from [Releases](https://github.com/funatsufumiya/godot_finder/releases) into `bin` folder
 
-### Enable Plugin
+
+### 2. Enable Plugin
 
 - Enable the plugin in the project settings
 
 ## Build and Run
 
-- `git submodule update --init --recursive --recommend-shallow --depth 1`
-- `scons`
-- `scons target=template_release`
-- `godot project/project.godot` (only first time)
-- `godot --path project/`
+(This process is needed only if you build this plugin by your own)
+
+```bash
+$ git submodule update --init --recursive --recommend-shallow --depth 1
+$ scons
+$ scons target=template_release
+$ godot project/project.godot # (only first time)
+$ godot --path project/ # run demo
+```
