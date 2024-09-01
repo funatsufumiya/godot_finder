@@ -39,6 +39,19 @@ print(sprites) # -> [SpriteA, SpriteB, SpriteC, SpriteD]
 # query node by user defined type
 var my_sprites = Finder.find_children_by_type(root, "MySprite")
 print(my_sprites) # -> [SpriteA, SpriteD]
+
+# query parent node by name
+var parent1 = Finder.find_parent_by_name(test1, "MyRoot")
+print(parent1) # -> MyRoot
+
+# query parent node by type
+var parent2 = Finder.find_parent_by_type(test1, "Node2D")
+print(parent2) # -> MyRoot
+
+# query parent nodes by type
+var sprite_d = Finder.find_child_by_name(root, "SpriteD")
+var parents = Finder.find_parents_by_type(sprite_d, "Node2D")
+print(parents) # -> [ParentB, ParentA, MyRoot]
 ```
 
 ## Install

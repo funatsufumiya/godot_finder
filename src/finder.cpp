@@ -20,6 +20,10 @@ void FinderImpl::_bind_methods() {
     ClassDB::bind_method(D_METHOD("find_children_by_type_with_condition", "parent", "typeName", "condition"), &FinderImpl::find_children_by_type_with_condition);
     ClassDB::bind_method(D_METHOD("find_child_by_name", "parent", "name"), &FinderImpl::find_child_by_name);
     ClassDB::bind_method(D_METHOD("find_children_by_name", "parent", "name"), &FinderImpl::find_children_by_name);
+    ClassDB::bind_method(D_METHOD("find_parent_by_type", "node", "typeName"), &FinderImpl::find_parent_by_type);
+    ClassDB::bind_method(D_METHOD("find_parents_by_type", "node", "typeName"), &FinderImpl::find_parents_by_type);
+    ClassDB::bind_method(D_METHOD("find_parent_by_name", "node", "name"), &FinderImpl::find_parent_by_name);
+    ClassDB::bind_method(D_METHOD("find_parents_by_name", "node", "name"), &FinderImpl::find_parents_by_name);
     ClassDB::bind_method(D_METHOD("is_children", "parent", "node"), &FinderImpl::is_children);
     ClassDB::bind_method(D_METHOD("get_root"), &FinderImpl::get_root);
 }
@@ -79,15 +83,6 @@ void FinderImpl::_process(double delta)
 {
     // UtilityFunctions::print("FinderImpl::_process");
 }
-
-// Node* find_child_by_type(Node* parent, String type);
-//     Array find_children_by_type(Node* parent, String type);
-//     Node* find_child_by_type_with_condition(Node* parent, String type, Callable condition);
-//     Array find_children_by_type_with_condition(Node* parent, String type, Callable condition);
-//     Node* find_child_by_name(Node* parent, String name);
-//     Array find_children_by_name(Node* parent, String name);
-//     bool is_children(Node* parent, Node* node);
-//     Node* get_root();
 
 Node* FinderImpl::find_child_by_type(Node* parent, String typeName)
 {
@@ -211,6 +206,84 @@ Array FinderImpl::find_children_by_name(Node* parent, String name)
         {
             result.append(grandchilds[j]);
         }
+    }
+    return result;
+}
+
+Node* FinderImpl::find_parent_by_type(Node* node, String typeName)
+{
+    if (node == nullptr)
+    {
+        UtilityFunctions::push_warning("find_parent_by_type: node is null");
+        return nullptr;
+    }
+    Node* parent = node->get_parent();
+    while (parent != nullptr)
+    {
+        if (is_instance_of(parent, typeName))
+        {
+            return parent;
+        }
+        parent = parent->get_parent();
+    }
+    return nullptr;
+}
+
+Array FinderImpl::find_parents_by_type(Node* node, String typeName)
+{
+    Array result;
+    if (node == nullptr)
+    {
+        UtilityFunctions::push_warning("find_parents_by_type: node is null");
+        return result;
+    }
+    Node* parent = node->get_parent();
+    while (parent != nullptr)
+    {
+        if (is_instance_of(parent, typeName))
+        {
+            result.append(parent);
+        }
+        parent = parent->get_parent();
+    }
+    return result;
+}
+
+Node* FinderImpl::find_parent_by_name(Node* node, String name)
+{
+    if (node == nullptr)
+    {
+        UtilityFunctions::push_warning("find_parent_by_name: node is null");
+        return nullptr;
+    }
+    Node* parent = node->get_parent();
+    while (parent != nullptr)
+    {
+        if (parent->get_name() == name)
+        {
+            return parent;
+        }
+        parent = parent->get_parent();
+    }
+    return nullptr;
+}
+
+Array FinderImpl::find_parents_by_name(Node* node, String name)
+{
+    Array result;
+    if (node == nullptr)
+    {
+        UtilityFunctions::push_warning("find_parents_by_name: node is null");
+        return result;
+    }
+    Node* parent = node->get_parent();
+    while (parent != nullptr)
+    {
+        if (parent->get_name() == name)
+        {
+            result.append(parent);
+        }
+        parent = parent->get_parent();
     }
     return result;
 }
