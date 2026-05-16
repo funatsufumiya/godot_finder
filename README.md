@@ -1,6 +1,6 @@
 # godot_finder
 
-Node finder addon for Godot 4.2.2 - 4.4, written in C++, GDExtension.
+Node finder addon for Godot 4.2.2 - 4.6, written in C++, GDExtension.
 
 > [!Note]
 > If you need **Pure GDScript** edition of godot_finder (such as for browser or mobile, much portable but slower,) please consider **godot_finder_gdscript** instead:<br>
